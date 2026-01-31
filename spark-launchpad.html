@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SPARK.COIN - Advanced Token Launchpad</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        spark: {
+                            yellow: '#FFD700',
+                            orange: '#FF8C00',
+                            dark: '#0a0a0a',
+                            slate: '#1a1a1a',
+                            purple: '#9333EA',
+                            cyan: '#06B6D4'
+                        }
+                    },
+                    fontFamily: {
+                        display: ['Orbitron', 'sans-serif'],
+                        body: ['Space Grotesk', 'sans-serif'],
+                    },
+                },
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .font-display {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Cyberpunk Grid Background */
+        .cyber-grid {
+            background-image: 
+                linear-gradient(rgba(255, 215, 0, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 215, 0, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: grid-move 20s linear infinite;
+        }
+
+        @keyframes grid-move {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+
+        /* Glass morphism */
+        .glass {
+            background: rgba(26, 26, 26, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        .glass-strong {
+            background: rgba(26, 26, 26, 0.9);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        /* Neon glow effects */
+        .neon-gold {
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5),
+                        0 0 20px rgba(255, 215, 0, 0.3),
+                        0 0 30px rgba(255, 215, 0, 0.1);
+        }
+
+        .neon-purple {
+            box-shadow: 0 0 10px rgba(147, 51, 234, 0.5),
+                        0 0 20px rgba(147, 51, 234, 0.3);
+        }
+
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #FFD700 0%, #FF8C00 50%, #FFD700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #FFD700, #FF8C00);
+            border-radius: 4px;
+        }
+
+        /* Pulse animation */
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        /* Chart container */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+        }
+
+        /* Token card hover effect */
+        .token-card {
+            transition: all 0.3s ease;
+        }
+
+        .token-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 215, 0, 0.5);
+        }
+
+        /* Input focus effects */
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #FFD700;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+        }
+
+        /* Button styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #FFD700 0%, #FF8C00 100%);
+            color: #000;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid #FFD700;
+            color: #FFD700;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 215, 0, 0.2);
+        }
+
+        /* Trade panel styles */
+        .trade-panel {
+            background: linear-gradient(to bottom, rgba(26, 26, 26, 0.95), rgba(10, 10, 10, 0.98));
+        }
+
+        /* Status badge */
+        .status-live {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22C55E;
+            border: 1px solid #22C55E;
+        }
+
+        .status-pending {
+            background: rgba(234, 179, 8, 0.2);
+            color: #EAB308;
+            border: 1px solid #EAB308;
+        }
+
+        /* Sparkle effect */
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        .sparkle {
+            animation: sparkle 1.5s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="cyber-grid">
+    <div id="root"></div>
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // Icons
+        const Zap = (props) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+        );
+
+        const TrendingUp = (props) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                <polyline points="17 6 23 6 23 12"></polyline>
+            </svg>
+        );
+
+        const Shield = (props) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+        );
+
+        const Wallet = (props) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
+                <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path>
+                <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path>
+                <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path>
+            </svg>
+        );
+
+        const Rocket = (props) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
+                <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
+                <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
+            </svg>
+        );
+
+        const Fire = (props) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
+                <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
+            </svg>
+        );
+
+        const Lock = (props) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+        );
+
+        function SparkLaunchpad() {
+            const [connected, setConnected] = useState(false);
+            const [activeTab, setActiveTab] = useState('trade');
+            const [walletAddress, setWalletAddress] = useState('');
+            const [buyAmount, setBuyAmount] = useState('');
+            const [sellAmount, setSellAmount] = useState('');
+            const [selectedToken, setSelectedToken] = useState(null);
+
+            // Mock live data
+            const [liveData, setLiveData] = useState({
+                price: 0.00000842,
+                marketCap: 2847392,
+                volume24h: 486293,
+                holders: 3847,
+                liquidity: 128473,
+                priceChange24h: 34.7
+            });
+
+            // Mock trending tokens
+            const [trendingTokens, setTrendingTokens] = useState([
+                { 
+                    name: 'SPARK', 
+                    symbol: 'SPARK', 
+                    price: 0.00000842, 
+                    change: 34.7, 
+                    volume: 486293, 
+                    marketCap: 2847392,
+                    holders: 3847,
+                    verified: true,
+                    description: 'Revolutionary meme coin with utility'
+                },
+                { 
+                    name: 'MOON', 
+                    symbol: 'MOON', 
+                    price: 0.00000234, 
+                    change: 128.4, 
+                    volume: 892341, 
+                    marketCap: 4920183,
+                    holders: 5621,
+                    verified: true,
+                    description: 'To the moon and beyond'
+                },
+                { 
+                    name: 'DOGE2.0', 
+                    symbol: 'DOGE2', 
+                    price: 0.00001567, 
+                    change: -12.3, 
+                    volume: 234521, 
+                    marketCap: 1847293,
+                    holders: 2134,
+                    verified: false,
+                    description: 'The next generation of DOGE'
+                }
+            ]);
+
+            useEffect(() => {
+                // Simulate live price updates
+                const interval = setInterval(() => {
+                    setLiveData(prev => ({
+                        ...prev,
+                        price: +(prev.price * (1 + (Math.random() * 0.02 - 0.01))).toFixed(8),
+                        volume24h: Math.floor(prev.volume24h * (1 + (Math.random() * 0.05 - 0.025))),
+                        priceChange24h: +(prev.priceChange24h + (Math.random() * 2 - 1)).toFixed(2)
+                    }));
+                }, 3000);
+
+                return () => clearInterval(interval);
+            }, []);
+
+            const connectWallet = () => {
+                // Mock wallet connection
+                const mockAddress = '0x' + Math.random().toString(16).substr(2, 40);
+                setWalletAddress(mockAddress);
+                setConnected(true);
+            };
+
+            const disconnectWallet = () => {
+                setConnected(false);
+                setWalletAddress('');
+            };
+
+            const handleTrade = (type) => {
+                alert(`${type} order simulated! In production, this would connect to blockchain.`);
+            };
+
+            const formatNumber = (num) => {
+                if (num >= 1000000) return `$${(num / 1000000).toFixed(2)}M`;
+                if (num >= 1000) return `$${(num / 1000).toFixed(2)}K`;
+                return `$${num.toFixed(2)}`;
+            };
+
+            return (
+                <div className="min-h-screen">
+                    {/* Header */}
+                    <header className="glass-strong border-b border-spark-yellow/20 sticky top-0 z-50">
+                        <div className="max-w-7xl mx-auto px-4 py-4">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-3">
+                                    <Zap className="w-8 h-8 text-spark-yellow" />
+                                    <h1 className="font-display text-2xl font-black gradient-text">SPARK.COIN</h1>
+                                    <span className="text-xs px-3 py-1 rounded-full bg-spark-yellow/10 text-spark-yellow border border-spark-yellow/30">
+                                        LAUNCHPAD
+                                    </span>
+                                </div>
+
+                                <nav className="hidden md:flex items-center space-x-6">
+                                    <a href="#trade" className="text-sm hover:text-spark-yellow transition">Trade</a>
+                                    <a href="#launch" className="text-sm hover:text-spark-yellow transition">Launch Token</a>
+                                    <a href="#trending" className="text-sm hover:text-spark-yellow transition">Trending</a>
+                                    <a href="#docs" className="text-sm hover:text-spark-yellow transition">Docs</a>
+                                </nav>
+
+                                {!connected ? (
+                                    <button 
+                                        onClick={connectWallet}
+                                        className="btn-primary px-6 py-2 rounded-lg flex items-center space-x-2">
+                                        <Wallet className="w-4 h-4" />
+                                        <span className="font-display text-sm">Connect Wallet</span>
+                                    </button>
+                                ) : (
+                                    <div className="flex items-center space-x-3">
+                                        <div className="glass px-4 py-2 rounded-lg text-sm font-mono">
+                                            {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+                                        </div>
+                                        <button 
+                                            onClick={disconnectWallet}
+                                            className="btn-secondary px-4 py-2 rounded-lg text-sm">
+                                            Disconnect
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* Main Content */}
+                    <div className="max-w-7xl mx-auto px-4 py-8">
+                        <div className="grid lg:grid-cols-3 gap-6">
+                            {/* Left Sidebar - Trending */}
+                            <div className="lg:col-span-1">
+                                <div className="glass-strong rounded-2xl p-6 sticky top-24">
+                                    <div className="flex items-center justify-between mb-6">
+                                        <h2 className="font-display text-xl font-bold gradient-text">
+                                            🔥 Trending
+                                        </h2>
+                                        <span className="text-xs px-2 py-1 rounded-full status-live">LIVE</span>
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        {trendingTokens.map((token, idx) => (
+                                            <div 
+                                                key={idx}
+                                                onClick={() => setSelectedToken(token)}
+                                                className="glass token-card p-4 rounded-xl cursor-pointer">
+                                                <div className="flex items-center justify-between mb-2">
+                                                    <div className="flex items-center space-x-2">
+                                                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-spark-yellow to-spark-orange flex items-center justify-center font-bold text-black">
+                                                            {token.symbol.charAt(0)}
+                                                        </div>
+                                                        <div>
+                                                            <div className="flex items-center space-x-1">
+                                                                <span className="font-bold text-sm">{token.symbol}</span>
+                                                                {token.verified && (
+                                                                    <Shield className="w-3 h-3 text-blue-400" />
+                                                                )}
+                                                            </div>
+                                                            <p className="text-xs text-gray-400">{token.name}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <div className="text-sm font-bold">${token.price.toFixed(8)}</div>
+                                                        <div className={`text-xs font-semibold ${token.change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                                            {token.change >= 0 ? '+' : ''}{token.change}%
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center justify-between text-xs text-gray-400 mt-2">
+                                                    <span>Vol: {formatNumber(token.volume)}</span>
+                                                    <span>MCap: {formatNumber(token.marketCap)}</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <button className="w-full mt-4 btn-secondary py-3 rounded-lg text-sm font-display">
+                                        View All Tokens
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Center - Chart & Trading */}
+                            <div className="lg:col-span-2 space-y-6">
+                                {/* Token Info Header */}
+                                <div className="glass-strong rounded-2xl p-6">
+                                    <div className="flex items-start justify-between mb-4">
+                                        <div>
+                                            <div className="flex items-center space-x-3 mb-2">
+                                                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-spark-yellow to-spark-orange flex items-center justify-center font-black text-2xl text-black neon-gold">
+                                                    S
+                                                </div>
+                                                <div>
+                                                    <div className="flex items-center space-x-2">
+                                                        <h2 className="font-display text-3xl font-black gradient-text">SPARK</h2>
+                                                        <Shield className="w-5 h-5 text-blue-400" />
+                                                    </div>
+                                                    <p className="text-gray-400 text-sm">Revolutionary Meme Coin</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="text-right">
+                                            <div className="text-3xl font-black gradient-text">${liveData.price.toFixed(8)}</div>
+                                            <div className={`text-lg font-semibold ${liveData.priceChange24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                                {liveData.priceChange24h >= 0 ? '+' : ''}{liveData.priceChange24h.toFixed(2)}%
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-4 gap-4">
+                                        {[
+                                            { label: 'Market Cap', value: formatNumber(liveData.marketCap) },
+                                            { label: '24h Volume', value: formatNumber(liveData.volume24h) },
+                                            { label: 'Holders', value: liveData.holders.toLocaleString() },
+                                            { label: 'Liquidity', value: formatNumber(liveData.liquidity) }
+                                        ].map((stat, idx) => (
+                                            <div key={idx} className="glass p-3 rounded-lg">
+                                                <div className="text-xs text-gray-400 mb-1">{stat.label}</div>
+                                                <div className="text-lg font-bold text-spark-yellow">{stat.value}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Chart */}
+                                <div className="glass-strong rounded-2xl p-6">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h3 className="font-display text-lg font-bold">Price Chart</h3>
+                                        <div className="flex items-center space-x-2">
+                                            {['1H', '24H', '7D', '30D'].map(period => (
+                                                <button key={period} className="px-3 py-1 text-xs rounded-lg glass hover:bg-spark-yellow/10 transition">
+                                                    {period}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="chart-container flex items-center justify-center">
+                                        <div className="text-center">
+                                            <TrendingUp className="w-16 h-16 text-spark-yellow/30 mx-auto mb-4" />
+                                            <p className="text-gray-500 text-sm">Live chart integration</p>
+                                            <p className="text-gray-600 text-xs mt-2">Connect TradingView or Chart.js API</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Trading Panel */}
+                                <div className="glass-strong rounded-2xl p-6 trade-panel">
+                                    <div className="flex items-center space-x-4 mb-6">
+                                        <button 
+                                            onClick={() => setActiveTab('trade')}
+                                            className={`flex-1 py-3 rounded-lg font-display font-bold transition ${activeTab === 'trade' ? 'btn-primary' : 'btn-secondary'}`}>
+                                            Trade
+                                        </button>
+                                        <button 
+                                            onClick={() => setActiveTab('launch')}
+                                            className={`flex-1 py-3 rounded-lg font-display font-bold transition ${activeTab === 'launch' ? 'btn-primary' : 'btn-secondary'}`}>
+                                            <Rocket className="w-4 h-4 inline mr-2" />
+                                            Launch Token
+                                        </button>
+                                    </div>
+
+                                    {activeTab === 'trade' ? (
+                                        <div className="space-y-6">
+                                            {/* Buy Section */}
+                                            <div className="glass p-5 rounded-xl">
+                                                <h4 className="font-display font-bold mb-4 text-green-400 flex items-center">
+                                                    <TrendingUp className="w-4 h-4 mr-2" />
+                                                    Buy SPARK
+                                                </h4>
+                                                <div className="space-y-3">
+                                                    <div>
+                                                        <label className="text-xs text-gray-400 mb-1 block">Amount (SOL)</label>
+                                                        <input 
+                                                            type="number"
+                                                            value={buyAmount}
+                                                            onChange={(e) => setBuyAmount(e.target.value)}
+                                                            placeholder="0.0"
+                                                            className="w-full bg-black/30 border border-gray-700 rounded-lg px-4 py-3 text-lg font-bold focus:border-spark-yellow transition"
+                                                        />
+                                                    </div>
+                                                    <div className="flex items-center justify-between text-sm text-gray-400">
+                                                        <span>You'll receive (approx):</span>
+                                                        <span className="font-bold text-spark-yellow">
+                                                            {buyAmount ? (parseFloat(buyAmount) / liveData.price).toFixed(2) : '0'} SPARK
+                                                        </span>
+                                                    </div>
+                                                    <div className="grid grid-cols-4 gap-2">
+                                                        {[0.1, 0.5, 1, 5].map(amount => (
+                                                            <button 
+                                                                key={amount}
+                                                                onClick={() => setBuyAmount(amount.toString())}
+                                                                className="glass py-2 rounded-lg text-sm hover:bg-spark-yellow/10 transition">
+                                                                {amount} SOL
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                    <button 
+                                                        onClick={() => handleTrade('BUY')}
+                                                        disabled={!connected}
+                                                        className={`w-full py-4 rounded-lg font-display font-bold text-lg ${connected ? 'btn-primary' : 'bg-gray-700 text-gray-400 cursor-not-allowed'}`}>
+                                                        {connected ? 'Buy SPARK' : 'Connect Wallet to Trade'}
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            {/* Sell Section */}
+                                            <div className="glass p-5 rounded-xl">
+                                                <h4 className="font-display font-bold mb-4 text-red-400 flex items-center">
+                                                    <TrendingUp className="w-4 h-4 mr-2 transform rotate-180" />
+                                                    Sell SPARK
+                                                </h4>
+                                                <div className="space-y-3">
+                                                    <div>
+                                                        <label className="text-xs text-gray-400 mb-1 block">Amount (SPARK)</label>
+                                                        <input 
+                                                            type="number"
+                                                            value={sellAmount}
+                                                            onChange={(e) => setSellAmount(e.target.value)}
+                                                            placeholder="0.0"
+                                                            className="w-full bg-black/30 border border-gray-700 rounded-lg px-4 py-3 text-lg font-bold focus:border-spark-yellow transition"
+                                                        />
+                                                    </div>
+                                                    <div className="flex items-center justify-between text-sm text-gray-400">
+                                                        <span>You'll receive (approx):</span>
+                                                        <span className="font-bold text-spark-yellow">
+                                                            {sellAmount ? (parseFloat(sellAmount) * liveData.price).toFixed(4) : '0'} SOL
+                                                        </span>
+                                                    </div>
+                                                    <button 
+                                                        onClick={() => handleTrade('SELL')}
+                                                        disabled={!connected}
+                                                        className={`w-full py-4 rounded-lg font-display font-bold text-lg ${connected ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-700 text-gray-400 cursor-not-allowed'}`}>
+                                                        {connected ? 'Sell SPARK' : 'Connect Wallet to Trade'}
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            {/* Security Info */}
+                                            <div className="glass p-4 rounded-xl border border-blue-500/30">
+                                                <div className="flex items-start space-x-3">
+                                                    <Shield className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                                                    <div>
+                                                        <h5 className="font-bold text-sm text-blue-400 mb-1">Advanced Security</h5>
+                                                        <ul className="text-xs text-gray-400 space-y-1">
+                                                            <li>✓ Smart contract audited by CertiK</li>
+                                                            <li>✓ Liquidity locked for 12 months</li>
+                                                            <li>✓ Anti-rug pull protection</li>
+                                                            <li>✓ MEV protection enabled</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        /* Launch Token Form */
+                                        <div className="space-y-4">
+                                            <div className="glass p-6 rounded-xl border border-spark-yellow/30">
+                                                <h3 className="font-display text-xl font-bold gradient-text mb-4">🚀 Launch Your Token</h3>
+                                                <p className="text-sm text-gray-400 mb-6">Create and launch your token in minutes with advanced security features</p>
+                                                
+                                                <div className="space-y-4">
+                                                    <div>
+                                                        <label className="text-sm font-semibold mb-2 block">Token Name</label>
+                                                        <input 
+                                                            type="text"
+                                                            placeholder="My Awesome Token"
+                                                            className="w-full bg-black/30 border border-gray-700 rounded-lg px-4 py-3 focus:border-spark-yellow transition"
+                                                        />
+                                                    </div>
+                                                    
+                                                    <div>
+                                                        <label className="text-sm font-semibold mb-2 block">Token Symbol</label>
+                                                        <input 
+                                                            type="text"
+                                                            placeholder="MAT"
+                                                            className="w-full bg-black/30 border border-gray-700 rounded-lg px-4 py-3 focus:border-spark-yellow transition"
+                                                        />
+                                                    </div>
+                                                    
+                                                    <div>
+                                                        <label className="text-sm font-semibold mb-2 block">Total Supply</label>
+                                                        <input 
+                                                            type="number"
+                                                            placeholder="1000000000"
+                                                            className="w-full bg-black/30 border border-gray-700 rounded-lg px-4 py-3 focus:border-spark-yellow transition"
+                                                        />
+                                                    </div>
+
+                                                    <div>
+                                                        <label className="text-sm font-semibold mb-2 block">Description</label>
+                                                        <textarea 
+                                                            rows="3"
+                                                            placeholder="Describe your token..."
+                                                            className="w-full bg-black/30 border border-gray-700 rounded-lg px-4 py-3 focus:border-spark-yellow transition"
+                                                        ></textarea>
+                                                    </div>
+
+                                                    <div className="grid grid-cols-2 gap-4">
+                                                        <div className="glass p-4 rounded-lg">
+                                                            <div className="flex items-center justify-between mb-2">
+                                                                <span className="text-sm">Anti-Rug Protection</span>
+                                                                <Lock className="w-4 h-4 text-green-400" />
+                                                            </div>
+                                                            <p className="text-xs text-gray-400">Liquidity auto-locked</p>
+                                                        </div>
+                                                        <div className="glass p-4 rounded-lg">
+                                                            <div className="flex items-center justify-between mb-2">
+                                                                <span className="text-sm">Smart Audit</span>
+                                                                <Shield className="w-4 h-4 text-blue-400" />
+                                                            </div>
+                                                            <p className="text-xs text-gray-400">Auto security check</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="bg-spark-yellow/10 border border-spark-yellow/30 rounded-lg p-4">
+                                                        <div className="flex items-center justify-between mb-2">
+                                                            <span className="font-bold">Launch Fee</span>
+                                                            <span className="font-bold text-spark-yellow">0.5 SOL</span>
+                                                        </div>
+                                                        <p className="text-xs text-gray-400">Includes: Security audit, liquidity lock, listing</p>
+                                                    </div>
+
+                                                    <button 
+                                                        disabled={!connected}
+                                                        className={`w-full py-4 rounded-lg font-display font-bold text-lg ${connected ? 'btn-primary' : 'bg-gray-700 text-gray-400 cursor-not-allowed'}`}>
+                                                        {connected ? '🚀 Launch Token' : 'Connect Wallet to Launch'}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Features Section */}
+                        <div className="mt-12 grid md:grid-cols-3 gap-6">
+                            {[
+                                {
+                                    icon: Shield,
+                                    title: 'Military-Grade Security',
+                                    description: 'Smart contracts audited by top firms. Multi-sig wallets and anti-rug protection.',
+                                    color: 'blue'
+                                },
+                                {
+                                    icon: Zap,
+                                    title: 'Lightning Fast',
+                                    description: 'Sub-second transactions on Solana. Instant token launches with automated liquidity.',
+                                    color: 'yellow'
+                                },
+                                {
+                                    icon: Fire,
+                                    title: 'Deflationary Burns',
+                                    description: 'Automatic token burns with every transaction. Increasing scarcity over time.',
+                                    color: 'orange'
+                                }
+                            ].map((feature, idx) => (
+                                <div key={idx} className="glass-strong p-6 rounded-2xl hover:scale-105 transition-transform">
+                                    <feature.icon className={`w-12 h-12 mb-4 text-spark-${feature.color}`} />
+                                    <h3 className="font-display text-lg font-bold mb-2">{feature.title}</h3>
+                                    <p className="text-sm text-gray-400">{feature.description}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Footer */}
+                    <footer className="glass-strong border-t border-spark-yellow/20 mt-12 py-8">
+                        <div className="max-w-7xl mx-auto px-4">
+                            <div className="flex flex-col md:flex-row items-center justify-between">
+                                <div className="flex items-center space-x-2 mb-4 md:mb-0">
+                                    <Zap className="w-6 h-6 text-spark-yellow" />
+                                    <span className="font-display font-bold gradient-text">SPARK.COIN</span>
+                                    <span className="text-xs text-gray-500">Advanced Launchpad v1.0</span>
+                                </div>
+                                <div className="text-sm text-gray-500">
+                                    © 2026 SPARK.COIN | Powered by Solana
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<SparkLaunchpad />);
+    </script>
+</body>
+</html>
